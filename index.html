@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Particle System</title>
+    <style>
+        body,html {
+            margin:0;
+            padding:0;
+        }
+        footer{
+            text-align:center;
+        }
+        canvas {
+            background-color: black;
+            width:100%;
+            height:100%;
+        }
+        #p2pOn {
+            position:absolute;
+            top:20px;
+            left:20px;
+            padding:10px;
+            background-color:#888;
+            border:2px solid #222;
+            border-radius:5px;
+        }
+        #SpeedRange{
+            position:absolute;
+            top:100px;
+            left:20px;
+            padding:5px;
+            background-color:#888;
+            border:2px solid #222;
+            border-radius:5px;
+        }
+        #SpeedLabel{
+            position:absolute;
+            top:70px;
+            left:20px;
+            padding:5px;
+            background-color:#555;
+            border:2px solid #222;
+            border-radius:5px;
+        }
+        #MaxRange{
+            position:absolute;
+            top:180px;
+            left:20px;
+            padding:5px;
+            background-color:#888;
+            border:2px solid #222;
+            border-radius:5px;
+        }
+        #MaxLabel{
+            position:absolute;
+            top:150px;
+            left:20px;
+            padding:5px;
+            background-color:#555;
+            border:2px solid #222;
+            border-radius:5px;
+        }
+        #RateRange{
+            position:absolute;
+            top:280px;
+            left:20px;
+            padding:5px;
+            background-color:#888;
+            border:2px solid #222;
+            border-radius:5px;
+        }
+        #RateLabel{
+            position:absolute;
+            top:250px;
+            left:20px;
+            padding:5px;
+            background-color:#555;
+            border:2px solid #222;
+            border-radius:5px;
+        }
+        #Disclaimer{
+            position:absolute;
+            top:95%;
+            left:0px;
+            width:100%;
+            height:5%;
+            background-color:#333;
+            color:#fff;
+            cursor:pointer;
+        }
+
+        
+    </style>
+
+</head>
+<body>
+<canvas id="thecanvas"></canvas>
+<span id="p2pOn" onclick="turnP2POn()">Turn BitTess on!</span>
+<span id="SpeedLabel">Speed:3</span>
+<input type="range" id="SpeedRange" value="30" onchange="ChangeSpeed()">
+<span id="MaxLabel">Max:20000</span>
+<input type="range" id="MaxRange" value="50" onchange="ChangeMax()">
+<span id="RateLabel">Rate:10</span>
+<input type="range" id="RateRange" value="10" onchange="ChangeRate()">
+</body>
+<footer>
+    <span id="Disclaimer" onclick="gotoBitTess()"><br>Demonstration on how BitTess Architecture works</span>
+</footer>
+<script type="text/javascript" src="How.js"></script>
+<script> 
+//Licence:CREATIVE COMMONS PUBLIC LICENSE
+//https://creativecommons.org/licenses/by-nc/3.0/
+base = new Vector(midX/3,midY/3);
+for (var i = 0; i < 13000; i++) {
+  var x = Math.round(midX+(lats[i]*window.innerWidth/360));
+  var yy = Math.round(midY-(longs[i]*window.innerHeight/160));
+  var dx = (base.x-x)/Math.sqrt((base.x-x)*(base.x-x)+(base.y-yy)*(base.y-yy))*ejectionRate;
+  var dy = (base.y-yy)/Math.sqrt((base.x-x)*(base.x-x)+(base.y-yy)*(base.y-yy))*ejectionRate;
+  emitters[emitters.length] = new Emitter(new Vector(x, yy), new Vector(dx,dy),0,base);
+}
+function gotoBitTess(){
+    window.location = "http://www.bittess.com";
+}
+function turnP2POn(){
+    p2p=true;
+    document.getElementById("p2pOn").innerHTML = "BitTess on!"
+}
+function ChangeSpeed() {
+    var x = document.getElementById("SpeedRange").value;
+    document.getElementById("SpeedLabel").innerHTML = "Speed:"+x/10;
+    for(var i=0;i<emitters.length;i++){
+        //console.log(emitters[i].velocity);
+        emitters[i].velocity.setMagnitude(x/10);
+        //console.log(emitters[i].velocity);
+    }
+    ejectionRate = Math.round(x/10);
+}
+function ChangeMax() {
+    var x = document.getElementById("MaxRange").value;
+    maxParticles = x * 400;
+    document.getElementById("MaxLabel").innerHTML = "Max:"+x*400;
+}
+function ChangeRate() {
+    var x = document.getElementById("RateRange").value;
+    emissionRate = x ;
+    document.getElementById("RateLabel").innerHTML = "Rate:"+x;
+}
+</script>
+</html>
